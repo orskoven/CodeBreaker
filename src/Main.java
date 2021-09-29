@@ -5,7 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int k = 0;
         do {
-            System.out.println("Please choose to (press 'E') for Ceasarencoding , Ceasardeocding (press 'D'), Vigenere-encode(press 'V') or Vigenere-decode(press 'F'");
+            System.out.println("Please choose to (press 'E') for Ceasarencoding , Ceasardeocding (press 'D')\nVigenere-encode(press 'V'), Vigenere-decode(press 'F') standard-encoding-decoding (press 'S')");
             String inputAnswerGameMode = scanner.nextLine();
             String messageGameModeChoice = (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("E")) ?
                     "You chose: Ceasarencoding"
@@ -13,11 +13,12 @@ public class Main {
                     "You chose: Ceasardecoding" : (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("V")) ?
                     "You chose: Vigener-encoding"
                     : (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("F")) ?
-                    "You chose: Vigenere-decoding" : "Please press 'E','D','V' or 'F' inorder to continue";
+                    "You chose: Vigenere-decoding" :(inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("S")) ?"You chose: Standard-encoding-decoding" :"Please press 'E','D','V','F' or 'S' inorder to continue";
             System.out.println(messageGameModeChoice);
             boolean checkTheInput = inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("E") || (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("D")) ||
                     (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("V")) ||
-                    (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("F"));
+                    (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("F"))||
+                    (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("S"));
             for (boolean t = checkTheInput; t; t = false)
                 if (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("E")) {
                     try {
@@ -72,6 +73,17 @@ public class Main {
                     } catch (InputMismatchException exception) {
                         System.out.println("Something went wrong?");
                     }
+                } else if (inputAnswerGameMode.toUpperCase(Locale.ROOT).equals("S")) {
+                    try {
+                        System.out.println("Please enter the message you want to standard-encode:");
+                        String encoderInput = scanner.nextLine();
+                        System.out.println("Yor message encoded is:");
+                        System.out.println(Arrays.toString(numberCypherEncoder(encoderInput)));
+                        System.out.println("Yor message decoded is:");
+                        System.out.println(numberCypherDecoder((numberCypherEncoder(encoderInput))));
+                    } catch (InputMismatchException exception) {
+                        System.out.println("Something went wrong?");
+                    }
                 }
 
 
@@ -81,7 +93,7 @@ public class Main {
     public static String numberCypherDecoder(int[] original) {
         String reversed = "";
         for (int i = 0; i < original.length; i++) {
-            char k = (char) (original[i] + 1);
+            char k = (char) (original[i] + 96);
             reversed += k;
         }
 
@@ -174,8 +186,20 @@ public class Main {
             }
         }
         return numberCypherDecoder(counterArray);
+    }
 
-
+    public static int[] numberCypherEncoder(String inputString) {
+        int[] counterArray = new int[inputString.length()];
+        for (int k = counterArray[0]; k < inputString.length(); k++) {
+            for (char i = inputString.charAt(k); counterArray[k] <= k; i++) {
+                if (counterArray[k] >= i) {
+                    counterArray[k] = i -1% 96 - 95;
+                } else {
+                    counterArray[k] = i -1% 96 - 95;
+                }
+            }
+        }
+        return counterArray;
     }
 
 }
